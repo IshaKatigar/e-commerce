@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card, Carousel, Button } from "react-bootstrap";
 
-import { getProducts } from "services/products";
+import { getProducts } from "services";
 import Loader from "components/loader";
-import DetailedView from "pages/detailedView";
+import Product from "pages/product";
 
-import { ProductListI } from "./interfaces";
+import { ProductListI } from "types";
 import "./Products.css";
 
 const Products = () => {
@@ -33,26 +33,31 @@ const Products = () => {
   }, []);
 
   useEffect(() => {
+    // fetch the products
     fetchProducts();
   }, [fetchProducts]);
 
+  // show the detailed view of the product
   const onCardClick = (product: ProductListI) => {
     setShowDetailedView(true);
     setSelectedProduct(product);
   };
 
   useEffect(() => {
+    // manage the search functionality using the debouncing
     const delaySearch = setTimeout(() => {
       const filtered: ProductListI[] = [...products].filter((product) =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredProducts(filtered);
-    }, 350);
+    }, 500);
 
+    // clear the timeout when the component is unmounted
     return () => clearTimeout(delaySearch);
   }, [searchTerm, products]);
 
   useEffect(() => {
+    // show the product list based on the sort order
     setFilteredProducts((prevState) =>
       [...prevState].sort((a, b) =>
         sortOrder === "asc" ? a.price - b.price : b.price - a.price
@@ -64,11 +69,27 @@ const Products = () => {
     <>
       {isLoading && <Loader />}
 
-      <div className="w-100 text-end">
-        <Button variant="outline-primary" onClick={() => navigate("/cart")}>
-          Cart
-        </Button>
+      <div className="w-100 d-flex justify-content-between align-items-center">
+        {showDetailedView && (
+          <Button
+            variant="outline-secondary"
+            className="py-1 px-4"
+            onClick={() => navigate("/")}
+          >
+            Back
+          </Button>
+        )}
+        <div className="w-100 text-end">
+          <Button
+            variant="outline-primary"
+            className="py-1 px-4"
+            onClick={() => navigate("/cart")}
+          >
+            Cart
+          </Button>
+        </div>
       </div>
+
       <h1
         className="w-100 text-center cursor-pointer mb-4"
         onClick={() => setShowDetailedView(false)}
@@ -78,7 +99,7 @@ const Products = () => {
 
       {showDetailedView && selectedProduct ? (
         <div>
-          <DetailedView selectedProduct={selectedProduct} />
+          <Product selectedProduct={selectedProduct} />
         </div>
       ) : (
         <div>
@@ -89,7 +110,7 @@ const Products = () => {
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="border border-secondary rounded-2 me-2 p-1"
+                className="border border-secondary rounded-2 me-2 p-1 px-3"
               />
             </div>
             <div>
@@ -105,12 +126,13 @@ const Products = () => {
             </div>
           </div>
 
+          {/* render the list of products */}
           {filteredProducts.length > 0 ? (
             <Row className="g-4">
               {filteredProducts?.map((product) => {
                 return (
                   <Col
-                    xs={4}
+                    xs={6}
                     md={3}
                     key={product.id.toString()}
                     onClick={() => onCardClick(product)}
@@ -135,6 +157,7 @@ const Products = () => {
               })}
             </Row>
           ) : (
+            // manage empty state
             <div className="d-flex justify-content-center w-100 my-4">
               <h3 className="text-muted">No products are available.</h3>
             </div>

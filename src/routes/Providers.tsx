@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { Outlet } from "react-router-dom";
 
 import store from "store/configureStore";
-import Loader from "components/Loader";
+import Loader from "components/loader";
 
 const Providers = () => {
   return (

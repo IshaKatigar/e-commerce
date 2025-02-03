@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, ButtonGroup, Col, Row } from "react-bootstrap";
 
-import useRedux from "components/hooks/redux";
+import useRedux from "hooks/redux";
 import {
   removeFromCart,
   incrementQuantity,
@@ -18,6 +18,16 @@ const Cart = () => {
 
   return (
     <div>
+      <div className="w-100 text-start">
+        <Button
+          variant="outline-secondary"
+          className="py-1 px-4 mb-4"
+          onClick={() => navigate("/")}
+        >
+          Back
+        </Button>
+      </div>
+
       <h1
         className="w-100 text-center cursor-pointer mb-4"
         onClick={() => navigate("/")}
@@ -25,11 +35,12 @@ const Cart = () => {
         Cart
       </h1>
 
+      {/* render cart items */}
       {cart?.map((item) => {
         return (
           <div key={item.id} className="border p-2 rounded-2 mb-4">
             <Row className="w-100 align-items-center">
-              <Col xs={10}>
+              <Col xs={12} md={8} lg={10}>
                 <div className="d-flex align-items-center gap-4">
                   <img
                     src={item.images[0]?.url}
@@ -43,8 +54,8 @@ const Cart = () => {
                   </div>
                 </div>
               </Col>
-              <Col xs={1}>
-                <ButtonGroup>
+              <Col xs={4} md={2} lg={1}>
+                <ButtonGroup className="my-2">
                   <Button
                     variant="outline-secondary"
                     size="sm"
@@ -73,7 +84,7 @@ const Cart = () => {
                   </Button>
                 </ButtonGroup>
               </Col>
-              <Col xs={1}>
+              <Col xs={4} md={2} lg={1}>
                 <Button
                   variant="outline-danger"
                   onClick={() => dispatch(removeFromCart(item.id))}
