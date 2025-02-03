@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { ProductListI } from "pages/products/interfaces";
+import { ProductListI } from "types";
 
 type InitialStateI = {
   cartItems: (ProductListI & { quantity: number })[];

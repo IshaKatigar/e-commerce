@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 
-import AllRoutes from "./AllRoutes";
+import AllRoutes from "./Routes";
 
 const Routes = () => {
   return (

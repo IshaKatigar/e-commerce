@@ -4,10 +4,11 @@ import { Provider } from "react-redux";
 import { Outlet } from "react-router-dom";
 
 import store from "store/configureStore";
+import Loader from "components/Loader";
 
 const Providers = () => {
   return (
-    <Suspense fallback={"Loading..."}>
+    <Suspense fallback={<Loader />}>
       <Provider store={store}>
         <Container fluid className="p-4">
           <Outlet />
